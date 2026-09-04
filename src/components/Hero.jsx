@@ -62,11 +62,15 @@ export default function Hero() {
         loop
         muted
         playsInline
-        preload={isMobile ? "none" : "metadata"}
+        preload="auto"
+        poster="/video/poster.jpg"
         className="absolute inset-0 h-full w-full object-cover object-center will-change-transform"
         aria-hidden="true"
       >
-        <source src="/video/pho.mp4" type="video/mp4" />
+        <source
+          src={isMobile ? "/video/pho-720.mp4" : "/video/pho-1080.mp4"}
+          type="video/mp4"
+        />
       </video>
 
       {/* Dark overlay */}
