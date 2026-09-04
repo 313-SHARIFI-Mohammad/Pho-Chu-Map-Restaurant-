@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", serif;
+  --font-body: "Inter", sans-serif;
+  --font-serif: "Noto Serif Display", serif;
+  --font-elegant: "Cormorant Garamond", serif;
+
+  --color-brand-50: #fef7ee;
+  --color-brand-100: #fdedd3;
+  --color-brand-200: #f9d7a5;
+  --color-brand-300: #f5b96d;
+  --color-brand-400: #f09333;
+  --color-brand-500: #ec7a12;
+  --color-brand-600: #dd5f08;
+  --color-brand-700: #b74709;
+  --color-brand-800: #92380f;
+  --color-brand-900: #763010;
+
+  --color-dark-900: #1a1209;
+  --color-dark-800: #261c10;
+  --color-dark-700: #332616;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-dark-900);
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(240, 147, 51, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(240, 147, 51, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 30% at 10% 80%, rgba(240, 147, 51, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-brand-500);
+  color: white;
+}
+
+.text-glow {
+  text-shadow:
+    0 0 10px rgba(240, 147, 51, 0.6),
+    0 0 30px rgba(240, 147, 51, 0.3),
+    0 0 60px rgba(240, 147, 51, 0.15);
+}
+
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
