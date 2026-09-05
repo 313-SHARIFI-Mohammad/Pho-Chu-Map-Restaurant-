@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function About() {
   return (
     <section id="about" className="relative bg-dark-900 py-16 text-white md:py-24">
@@ -43,12 +45,12 @@ export default function About() {
 
             {/* Quick CTA */}
             <div className="pt-2">
-              <a
-                href="#menu"
+              <Link
+                to="/menu"
                 className="inline-flex items-center justify-center rounded-sm bg-brand-500 px-6 py-3 font-body text-xs font-semibold tracking-wider text-white uppercase transition-all duration-300 hover:bg-brand-400 sm:text-sm"
               >
                 Explore Full Menu
-              </a>
+              </Link>
             </div>
           </div>
         </div>

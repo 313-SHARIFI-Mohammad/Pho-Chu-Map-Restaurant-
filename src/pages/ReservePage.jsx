@@ -1,14 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { CalendarCheck, Users, Phone, User, Calendar, Clock, MessageSquare } from "lucide-react";
+import { Users, Phone, User, Calendar, Clock, MessageSquare } from "lucide-react";
 import { useReservationStore } from "../store/reservationStore";
+import { toast } from "../store/toastStore";
+import Spinner from "../components/Spinner";
 
 const inputStyles =
   "w-full rounded-lg border border-white/10 bg-dark-800/50 px-4 py-3 font-body text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-brand-400/50 focus:ring-1 focus:ring-brand-400/30 transition-colors";
 
 export default function ReservePage() {
   const addReservation = useReservationStore((state) => state.addReservation);
-  const [confirmed, setConfirmed] = useState(null);
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -23,14 +27,22 @@ export default function ReservePage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const reservation = {
-      ...form,
-      id: `RES-${Date.now().toString().slice(-6)}`,
-    };
-    addReservation(reservation);
-    setConfirmed(reservation);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 700));
+      const reservation = {
+        ...form,
+        id: `RES-${Date.now().toString().slice(-6)}`,
+      };
+      addReservation(reservation);
+      toast.success(`Reservation ${reservation.id} confirmed`);
+      navigate(`/reservation-confirmation/${reservation.id}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -51,53 +63,7 @@ export default function ReservePage() {
           <div className="mt-4 mx-auto h-px w-24 bg-gradient-to-r from-transparent via-brand-400 to-transparent" />
         </motion.div>
 
-        {confirmed ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-brand-400/30 bg-dark-800/60 p-8 text-center"
-          >
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 text-green-400">
-              <CalendarCheck className="h-8 w-8" />
-            </div>
-            <h2 className="font-elegant text-3xl font-bold text-white">Reservation Confirmed</h2>
-            <p className="mt-2 font-body text-white/70">
-              See you soon, {confirmed.name}! Your table for {confirmed.guests}{" "}
-              {Number(confirmed.guests) === 1 ? "person" : "people"} is booked.
-            </p>
-            <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-xl border border-white/10 bg-dark-900/60 p-5 text-left font-body text-sm">
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Reference</span>
-                <span className="font-medium text-brand-300">{confirmed.id}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Date</span>
-                <span className="text-white">{confirmed.date || "--"}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Time</span>
-                <span className="text-white">{confirmed.time}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Guests</span>
-                <span className="text-white">{confirmed.guests}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Phone</span>
-                <span className="text-white">{confirmed.phone}</span>
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setConfirmed(null)}
-              className="mt-6 rounded-sm border border-brand-400 bg-brand-500/10 px-6 py-2.5 font-body text-xs font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-500"
-            >
-              Make Another Reservation
-            </button>
-          </motion.div>
-        ) : (
-          <motion.form
+        <motion.form
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -199,12 +165,19 @@ export default function ReservePage() {
 
             <button
               type="submit"
-              className="mt-6 w-full rounded-sm bg-brand-500 px-6 py-3 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(240,147,51,0.3)]"
+              disabled={isSubmitting}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-sm bg-brand-500 px-6 py-3 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(240,147,51,0.3)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:shadow-none"
             >
-              Confirm Reservation
+              {isSubmitting ? (
+                <>
+                  <Spinner />
+                  <span>Confirming...</span>
+                </>
+              ) : (
+                <span>Confirm Reservation</span>
+              )}
             </button>
           </motion.form>
-        )}
       </div>
     </section>
   );

@@ -11,10 +11,10 @@ const FOOTER_LINKS = {
     { label: 'Contact', href: '/#contact' },
   ],
   menuCategories: [
-    { label: 'Phở & Soups', href: '/#menu' },
-    { label: 'Appetizers', href: '/#menu' },
-    { label: 'Specialties', href: '/#menu' },
-    { label: 'Drinks', href: '/#menu' },
+    { label: 'Phở & Soups', href: '/menu' },
+    { label: 'Appetizers', href: '/menu' },
+    { label: 'Specialties', href: '/menu' },
+    { label: 'Drinks', href: '/menu' },
   ],
 };
 
@@ -192,6 +192,22 @@ export default function Footer() {
               <span>Fresh Daily</span>
             </span>
           </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="flex flex-col items-center justify-center gap-3 border-t border-white/10 pt-5 text-sm font-body text-white/40 sm:flex-row sm:gap-6"
+        >
+          <Link to="/privacy" className="transition-colors hover:text-brand-400">
+            Privacy Policy
+          </Link>
+          <span className="hidden h-3 w-px bg-white/10 sm:block" />
+          <Link to="/terms" className="transition-colors hover:text-brand-400">
+            Terms & Conditions
+          </Link>
         </motion.div>
       </div>
     </footer>

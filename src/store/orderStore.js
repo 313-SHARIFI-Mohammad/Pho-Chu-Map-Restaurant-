@@ -14,6 +14,8 @@ export const useOrderStore = create(
         set((state) => ({ orders: [full, ...state.orders] }));
         return full;
       },
+      getOrder: (id) =>
+        useOrderStore.getState().orders.find((order) => order.id === id),
     }),
     { name: "pho-orders" }
   )

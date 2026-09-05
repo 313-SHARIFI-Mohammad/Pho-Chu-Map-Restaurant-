@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Check } from "lucide-react";
 import { useMenuStore } from "../store/menuStore";
 import { useCartStore } from "../store/cartStore";
+import { toast } from "../store/toastStore";
 
 const containerVariants = {
   hidden: {},
@@ -28,6 +29,7 @@ export default function MenuSection() {
   const handleAdd = (item) => {
     addItem(item);
     setAddedId(item.id);
+    toast.success(`${item.name} added to your cart`);
     window.setTimeout(() => {
       setAddedId((current) => (current === item.id ? null : current));
     }, 1200);

@@ -9,6 +9,10 @@ export const useReservationStore = create(
         set((state) => ({
           reservations: [reservation, ...state.reservations],
         })),
+      getReservation: (id) =>
+        useReservationStore
+          .getState()
+          .reservations.find((reservation) => reservation.id === id),
     }),
     { name: "pho-reservations" }
   )

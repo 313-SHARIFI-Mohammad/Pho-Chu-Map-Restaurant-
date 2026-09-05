@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   MapPin,
@@ -9,10 +9,11 @@ import {
   MessageSquare,
   Banknote,
   CreditCard,
-  CheckCircle2,
 } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
 import { useOrderStore } from "../store/orderStore";
+import { toast } from "../store/toastStore";
+import Spinner from "../components/Spinner";
 
 function formatPrice(value) {
   return `$${value.toFixed(2)}`;
@@ -27,8 +28,9 @@ export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
   const addOrder = useOrderStore((state) => state.addOrder);
+  const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("card");
-  const [placed, setPlaced] = useState(null);
+  const [isPlacing, setIsPlacing] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -49,22 +51,30 @@ export default function CheckoutPage() {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const total = subtotal + DELIVERY_FEE;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const order = {
-      items,
-      subtotal,
-      deliveryFee: DELIVERY_FEE,
-      total,
-      payment: paymentMethod === "cod" ? "Cash on Delivery" : "Card",
-      customer: form,
-    };
-    const placed = addOrder(order);
-    clearCart();
-    setPlaced(placed);
+    if (isPlacing) return;
+    setIsPlacing(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 900));
+      const order = {
+        items,
+        subtotal,
+        deliveryFee: DELIVERY_FEE,
+        total,
+        payment: paymentMethod === "cod" ? "Cash on Delivery" : "Card",
+        customer: form,
+      };
+      const placed = addOrder(order);
+      clearCart();
+      toast.success(`Order ${placed.id} placed successfully`);
+      navigate(`/order-confirmation/${placed.id}`);
+    } finally {
+      setIsPlacing(false);
+    }
   };
 
-  if (items.length === 0 && !placed) {
+  if (items.length === 0) {
     return (
       <section className="relative bg-dark-900 py-16 md:py-24 lg:py-32 min-h-screen">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
@@ -107,51 +117,7 @@ export default function CheckoutPage() {
           <div className="mt-4 mx-auto h-px w-24 bg-gradient-to-r from-transparent via-brand-400 to-transparent" />
         </motion.div>
 
-        {placed ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mx-auto max-w-lg rounded-2xl border border-brand-400/30 bg-dark-800/60 p-8 text-center"
-          >
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 text-green-400">
-              <CheckCircle2 className="h-8 w-8" />
-            </div>
-            <h2 className="font-elegant text-3xl font-bold text-white">Order Placed!</h2>
-            <p className="mt-2 font-body text-white/70">
-              Thanks, {placed.customer.name}! Your order is being prepared.
-            </p>
-            <div className="mx-auto mt-6 max-w-sm space-y-2 rounded-xl border border-white/10 bg-dark-900/60 p-5 text-left font-body text-sm">
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Order Reference</span>
-                <span className="font-medium text-brand-300">{placed.id}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Delivery To</span>
-                <span className="text-white">{placed.customer.address}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Total</span>
-                <span className="text-white">{formatPrice(placed.total)}</span>
-              </p>
-              <p className="flex justify-between gap-4">
-                <span className="text-white/50">Payment</span>
-                <span className="text-white">
-                  {placed.payment}
-                  {placed.payment === "Cash on Delivery"
-                    ? " - pay the driver in cash"
-                    : " - charged to your card"}
-                </span>
-              </p>
-            </div>
-            <Link
-              to="/"
-              className="mt-6 inline-block rounded-sm border border-brand-400 bg-brand-500/10 px-6 py-3 font-body text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-brand-500"
-            >
-              Back to Home
-            </Link>
-          </motion.div>
-        ) : (
+        (
           <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="space-y-6">
               <div className={fieldBox}>
@@ -422,16 +388,23 @@ export default function CheckoutPage() {
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded-sm bg-brand-500 px-6 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(240,147,51,0.3)]"
+                disabled={isPlacing}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-sm bg-brand-500 px-6 py-3.5 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(240,147,51,0.3)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:shadow-none"
               >
-                Place Order - {formatPrice(total)}
+                {isPlacing ? (
+                  <>
+                    <Spinner />
+                    <span>Placing Order...</span>
+                  </>
+                ) : (
+                  <span>Place Order - {formatPrice(total)}</span>
+                )}
               </button>
               <p className="mt-3 text-center font-body text-[11px] text-white/40">
                 For demo purposes. Card details are not processed or stored.
               </p>
             </div>
           </form>
-        )}
       </div>
     </section>
   );
