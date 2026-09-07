@@ -39,7 +39,7 @@ function RequireAdmin({ children }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   if (!isAuthenticated) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   return children;
@@ -77,7 +77,8 @@ export default function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
 
-          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
           <Route
             path="/admin/dashboard"
             element={

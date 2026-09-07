@@ -39,7 +39,7 @@ export default function AdminLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate("/admin");
+    navigate("/admin/login");
   };
 
   const renderPanel = () => {

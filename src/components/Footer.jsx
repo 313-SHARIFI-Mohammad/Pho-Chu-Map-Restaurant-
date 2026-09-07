@@ -1,20 +1,19 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock, Globe, ChevronUp } from 'lucide-react';
 
 const FOOTER_LINKS = {
   quickLinks: [
-    { label: 'Home', href: '/#home' },
-    { label: 'About', href: '/#about' },
-    { label: 'Menu', href: '/#menu' },
-    { label: 'Gallery', href: '/#gallery' },
-    { label: 'Contact', href: '/#contact' },
+    { label: 'Home', href: '#home' },
+    { label: 'About', href: '#about' },
+    { label: 'Menu', href: '#menu' },
+    { label: 'Gallery', href: '#gallery' },
+    { label: 'Contact', href: '#contact' },
   ],
   menuCategories: [
-    { label: 'Phở & Soups', href: '/menu' },
-    { label: 'Appetizers', href: '/menu' },
-    { label: 'Specialties', href: '/menu' },
-    { label: 'Drinks', href: '/menu' },
+    { label: 'Phở & Soups', href: '#menu' },
+    { label: 'Appetizers', href: '#menu' },
+    { label: 'Specialties', href: '#menu' },
+    { label: 'Drinks', href: '#menu' },
   ],
 };
 
@@ -48,11 +47,11 @@ export default function Footer() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-1"
           >
-            <Link to="/" className="flex items-center gap-2 mb-6">
+            <a href="#home" className="flex items-center gap-2 mb-6">
               <span className="font-display text-2xl md:text-3xl font-bold tracking-wider text-white">
                 Pho Chu Map
               </span>
-            </Link>
+            </a>
             <p className="font-body text-white/60 leading-relaxed mb-6 text-sm sm:text-base">
               Authentic Vietnamese cuisine in Parafield Gardens. 
               Slow-simmered broths, fresh herbs, and family recipes served daily.
@@ -88,14 +87,13 @@ export default function Footer() {
             <ul className="space-y-3">
               {FOOTER_LINKS.quickLinks.map((link) => (
                 <li key={link.label}>
-                  <motion.div whileHover={{ x: 4 }}>
-                    <Link
-                      to={link.href}
-                      className="font-body text-white/60 hover:text-brand-400 transition-colors duration-300 text-sm"
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
+                  <motion.a
+                    href={link.href}
+                    whileHover={{ x: 4 }}
+                    className="font-body text-white/60 hover:text-brand-400 transition-colors duration-300 text-sm"
+                  >
+                    {link.label}
+                  </motion.a>
                 </li>
               ))}
             </ul>
@@ -113,14 +111,13 @@ export default function Footer() {
             <ul className="space-y-3">
               {FOOTER_LINKS.menuCategories.map((link) => (
                 <li key={link.label}>
-                  <motion.div whileHover={{ x: 4 }}>
-                    <Link
-                      to={link.href}
-                      className="font-body text-white/60 hover:text-brand-400 transition-colors duration-300 text-sm"
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
+                  <motion.a
+                    href={link.href}
+                    whileHover={{ x: 4 }}
+                    className="font-body text-white/60 hover:text-brand-400 transition-colors duration-300 text-sm"
+                  >
+                    {link.label}
+                  </motion.a>
                 </li>
               ))}
             </ul>
@@ -192,22 +189,6 @@ export default function Footer() {
               <span>Fresh Daily</span>
             </span>
           </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          className="flex flex-col items-center justify-center gap-3 border-t border-white/10 pt-5 text-sm font-body text-white/40 sm:flex-row sm:gap-6"
-        >
-          <Link to="/privacy" className="transition-colors hover:text-brand-400">
-            Privacy Policy
-          </Link>
-          <span className="hidden h-3 w-px bg-white/10 sm:block" />
-          <Link to="/terms" className="transition-colors hover:text-brand-400">
-            Terms & Conditions
-          </Link>
         </motion.div>
       </div>
     </footer>
