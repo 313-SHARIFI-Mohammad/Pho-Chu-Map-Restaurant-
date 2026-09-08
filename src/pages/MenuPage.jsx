@@ -23,19 +23,27 @@ function formatPrice(value) {
 
 export default function MenuPage() {
   const menuItems = useMenuStore((state) => state.items);
+  const storeCategories = useMenuStore((state) => state.categories);
   const addItem = useCartStore((state) => state.addItem);
   const [activeCategory, setActiveCategory] = useState("All");
   const [addedId, setAddedId] = useState(null);
 
   const categories = [
     "All",
-    ...Array.from(new Set(menuItems.map((item) => item.category))),
+    ...storeCategories,
+    ...Array.from(new Set(menuItems.map((item) => item.category))).filter(
+      (category) => !storeCategories.includes(category)
+    ),
   ];
 
+  const activeCategorySafe = categories.includes(activeCategory)
+    ? activeCategory
+    : "All";
+
   const visibleItems =
-    activeCategory === "All"
+    activeCategorySafe === "All"
       ? menuItems
-      : menuItems.filter((item) => item.category === activeCategory);
+      : menuItems.filter((item) => item.category === activeCategorySafe);
 
   const handleAdd = (item) => {
     addItem(item);
@@ -79,7 +87,7 @@ export default function MenuPage() {
               type="button"
               onClick={() => setActiveCategory(category)}
               className={`rounded-full border px-4 py-1.5 font-body text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                activeCategory === category
+                activeCategorySafe === category
                   ? "border-brand-400 bg-brand-500/20 text-brand-300"
                   : "border-white/10 bg-dark-800/40 text-white/60 hover:border-brand-400/40 hover:text-white"
               }`}
@@ -95,7 +103,7 @@ export default function MenuPage() {
           </p>
         ) : (
           <motion.div
-            key={activeCategory}
+            key={activeCategorySafe}
             variants={containerVariants}
             initial="hidden"
             animate="visible"

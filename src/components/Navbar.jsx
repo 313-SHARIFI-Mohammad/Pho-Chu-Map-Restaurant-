@@ -36,7 +36,7 @@ export default function Navbar() {
       <nav
         className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? "bg-dark-900/95 py-3 shadow-lg shadow-black/30 backdrop-blur-md"
+            ? " h-15 bg-dark-900/95 py-3 shadow-lg shadow-black/30 backdrop-blur-md"
             : "bg-gradient-to-b from-black/60 to-transparent py-5"
         }`}
       >

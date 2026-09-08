@@ -45,9 +45,7 @@ export default function Gallery() {
             Our Gallery
           </span>
           <div className="mt-4 mx-auto h-px w-24 bg-gradient-to-r from-transparent via-brand-400 to-transparent" />
-          <p className="mt-4 font-body text-white/60 text-sm md:text-base max-w-lg mx-auto">
-            A glimpse into the Pho Chu Map experience
-          </p>
+
         </motion.div>
 
         <motion.div

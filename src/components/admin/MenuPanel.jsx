@@ -1,17 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { UtensilsCrossed, ImagePlus, Trash2, Check } from "lucide-react";
+import { UtensilsCrossed, ImagePlus, Trash2, Check, Plus } from "lucide-react";
 import { useMenuStore } from "../../store/menuStore";
 import { compressImage } from "../../utils/image";
-
-const CATEGORIES = [
-  "Pho & Soups",
-  "Entrées",
-  "Rice Dishes",
-  "Noodle Dishes",
-  "Specialties",
-  "Drinks",
-];
+import { toast } from "../../store/toastStore";
 
 function formatPrice(value) {
   return `$${Number(value).toFixed(2)}`;
@@ -22,18 +14,22 @@ const inputStyles =
 
 export default function MenuPanel() {
   const items = useMenuStore((state) => state.items);
+  const categories = useMenuStore((state) => state.categories);
   const addItem = useMenuStore((state) => state.addItem);
   const removeItem = useMenuStore((state) => state.removeItem);
+  const addCategory = useMenuStore((state) => state.addCategory);
+  const removeCategory = useMenuStore((state) => state.removeCategory);
 
   const [form, setForm] = useState({
     name: "",
-    category: CATEGORIES[0],
+    category: categories[0] ?? "",
     price: "",
     description: "",
   });
   const [imageData, setImageData] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [added, setAdded] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -63,10 +59,44 @@ export default function MenuPanel() {
       description: form.description || "Freshly prepared with quality ingredients.",
       image: imageData,
     });
-    setForm({ name: "", category: CATEGORIES[0], price: "", description: "" });
+    setForm({ name: "", category: categories[0] ?? "", price: "", description: "" });
     setImageData(null);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1500);
+  };
+
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    const name = newCategory.trim();
+    if (!name) return;
+    if (categories.includes(name)) {
+      toast.error(`Category "${name}" already exists`);
+      return;
+    }
+    addCategory(name);
+    setNewCategory("");
+    setForm((prev) => ({ ...prev, category: name }));
+    toast.success(`Category "${name}" added`);
+  };
+
+  const handleRemoveCategory = (name) => {
+    if (categories.length <= 1) {
+      toast.error("At least one category is required");
+      return;
+    }
+    const count = items.filter((item) => item.category === name).length;
+    if (count > 0) {
+      toast.error(
+        `Can't remove "${name}" — it still has ${count} ${count === 1 ? "dish" : "dishes"}. Delete or reassign them first.`
+      );
+      return;
+    }
+    removeCategory(name);
+    if (form.category === name) {
+      const fallback = categories.find((category) => category !== name) ?? "";
+      setForm((prev) => ({ ...prev, category: fallback }));
+    }
+    toast.success(`Category "${name}" removed`);
   };
 
   return (
@@ -144,11 +174,15 @@ export default function MenuPanel() {
                   onChange={handleChange}
                   className={inputStyles}
                 >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
+                  {categories.length === 0 ? (
+                    <option value="">No categories yet</option>
+                  ) : (
+                    categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
 
@@ -248,6 +282,68 @@ export default function MenuPanel() {
                 </motion.div>
               ))}
             </div>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-xl border border-white/10 bg-dark-800/60 p-5 md:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="font-serif text-lg font-semibold text-white">Manage Categories</h3>
+            <p className="mt-1 font-body text-sm text-white/50">
+              Categories become filters in the menu. Add one like "Drinks" first, then assign it to new dishes.
+            </p>
+          </div>
+          <form onSubmit={handleAddCategory} className="flex items-center gap-2">
+            <label htmlFor="new-category" className="sr-only">
+              New category name
+            </label>
+            <input
+              id="new-category"
+              type="text"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              placeholder="e.g. Drinks"
+              className="w-48 sm:w-60 rounded-lg border border-white/10 bg-dark-800/50 px-4 py-3 font-body text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-brand-400/50 focus:ring-1 focus:ring-brand-400/30 transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={!newCategory.trim()}
+              className="flex h-11 items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 font-body text-xs font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <Plus className="h-4 w-4" />
+              Add
+            </button>
+          </form>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {categories.length === 0 ? (
+            <p className="font-body text-sm text-white/60">No categories yet. Add your first one above.</p>
+          ) : (
+            categories.map((category) => {
+              const count = items.filter((item) => item.category === category).length;
+              return (
+                <span
+                  key={category}
+                  className="flex items-center gap-2 rounded-full border border-white/10 bg-dark-800/50 py-1.5 pl-3 pr-2 font-body text-xs text-white/70"
+                >
+                  <span className="min-w-0 truncate">{category}</span>
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500/15 px-1.5 font-body text-[10px] font-bold text-brand-300">
+                    {count}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveCategory(category)}
+                    aria-label={`Remove ${category}`}
+                    title={`Remove ${category}`}
+                    className="flex h-7 w-7 items-center justify-center rounded-full text-white/40 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </span>
+              );
+            })
           )}
         </div>
       </div>

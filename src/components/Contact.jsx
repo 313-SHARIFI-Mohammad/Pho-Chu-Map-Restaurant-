@@ -63,9 +63,6 @@ export default function Contact() {
             Contact Us
           </span>
           <div className="mt-4 mx-auto h-px w-24 bg-gradient-to-r from-transparent via-brand-400 to-transparent" />
-          <p className="mt-4 font-body text-white/60 text-sm md:text-base max-w-lg mx-auto">
-            Visit us, call ahead, or plan your next visit today
-          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
