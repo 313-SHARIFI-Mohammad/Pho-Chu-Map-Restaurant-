@@ -2,15 +2,15 @@ import { motion } from "framer-motion";
 
 const GALLERY_IMAGES = [
   {
-    src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=75",
+    src: "/images/resturant-pic.webp",
     alt: "Elegant restaurant interior with warm lighting",
   },
   {
-    src: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=75",
+    src: "/images/resturant-pic2.webp",
     alt: "Cozy restaurant dining area with wooden decor",
   },
   {
-    src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=75",
+    src: "/images/resturant-pic3.webp",
     alt: "Restaurant bar and lounge atmosphere",
   },
 ];

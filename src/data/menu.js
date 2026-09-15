@@ -1,3 +1,5 @@
+
+
 export const MENU_ITEMS = [
   {
     id: "pho-bo",
@@ -5,7 +7,7 @@ export const MENU_ITEMS = [
     description: "Classic beef pho with slow-simmered bone broth, rice noodles, sliced beef, bean sprouts, and fresh herbs",
     price: 16.9,
     category: "Pho & Soups",
-    image: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "pho-ga",
@@ -13,7 +15,7 @@ export const MENU_ITEMS = [
     description: "Fragrant chicken pho with clear broth, tender poached chicken, rice noodles, and crispy shallots",
     price: 15.9,
     category: "Pho & Soups",
-    image: "https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "bun-bo-hue",
@@ -21,7 +23,7 @@ export const MENU_ITEMS = [
     description: "Spicy central Vietnamese beef noodle soup with lemongrass, pork, beef shank, and fresh herbs",
     price: 17.9,
     category: "Pho & Soups",
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "banh-mi",
@@ -29,7 +31,7 @@ export const MENU_ITEMS = [
     description: "Crispy Vietnamese baguette with pate, pork, pickled daikon, carrot, cucumber, cilantro, and chilli",
     price: 13.9,
     category: "Specialties",
-    image: "https://images.unsplash.com/photo-1600688640154-9619e002df30?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "com-tam",
@@ -37,7 +39,7 @@ export const MENU_ITEMS = [
     description: "Broken rice plate with grilled pork chop, shredded pork skin, steamed egg cake, and fish sauce",
     price: 17.9,
     category: "Rice Dishes",
-    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "goi-cuon",
@@ -45,7 +47,7 @@ export const MENU_ITEMS = [
     description: "Fresh rice paper rolls with prawn, pork, vermicelli, lettuce, mint, and sweet peanut sauce",
     price: 12.9,
     category: "Entrées",
-    image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "bun-cha-gio",
@@ -53,7 +55,7 @@ export const MENU_ITEMS = [
     description: "Cold vermicelli noodles with crispy spring rolls, fresh herbs, pickled vegetables, and nuoc cham",
     price: 16.9,
     category: "Noodle Dishes",
-    image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "banh-xeo",
@@ -61,7 +63,7 @@ export const MENU_ITEMS = [
     description: "Crispy Vietnamese pancake filled with prawns, pork, bean sprouts, served with lettuce and fish sauce",
     price: 15.9,
     category: "Specialties",
-    image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "hu-tieu-nam-vang",
@@ -69,7 +71,7 @@ export const MENU_ITEMS = [
     description: "Phnom Penh-style noodle soup with pork, prawns, minced pork, quail eggs, and garlic chives",
     price: 17.9,
     category: "Pho & Soups",
-    image: "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
   {
     id: "com-chien",
@@ -77,6 +79,6 @@ export const MENU_ITEMS = [
     description: "Wok-fried jasmine rice with egg, vegetables, soy sauce, and your choice of chicken, beef, or prawn",
     price: 16.9,
     category: "Rice Dishes",
-    image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=400&q=75",
+    image: "",
   },
 ];

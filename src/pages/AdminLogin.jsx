@@ -3,26 +3,33 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, User, Eye, EyeOff, ArrowRight, UtensilsCrossed } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
+import Spinner from "../components/Spinner";
 
 const inputStyles =
   "w-full rounded-lg border border-white/10 bg-dark-800/60 pl-12 pr-12 py-4 font-body text-base text-white placeholder:text-white/40 focus:outline-none focus:border-brand-400/50 focus:ring-1 focus:ring-brand-400/30 transition-colors";
 
 export default function AdminLogin() {
   const login = useAuthStore((state) => state.login);
+  const loginError = useAuthStore((state) => state.loginError);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(username.trim(), password);
+    if (loading) return;
+    setLoading(true);
+    setError("");
+    const success = await login(username.trim(), password);
     if (success) {
       navigate("/admin/dashboard");
     } else {
-      setError("Invalid username or password.");
+      setError(loginError || "Invalid username or password.");
     }
+    setLoading(false);
   };
 
   return (
@@ -106,9 +113,19 @@ export default function AdminLogin() {
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-6 py-4 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(240,147,51,0.35)]"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-6 py-4 font-body text-sm font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400 hover:shadow-[0_0_30px_rgba(240,147,51,0.35)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Sign In <ArrowRight className="h-4 w-4" />
+              {loading ? (
+                <>
+                  <Spinner />
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  Sign In <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
           </form>
         </div>

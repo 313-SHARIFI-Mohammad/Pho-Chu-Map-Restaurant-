@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
+import SafeImage from "../components/SafeImage";
 
 function formatPrice(value) {
   return `$${value.toFixed(2)}`;
@@ -37,17 +38,17 @@ export default function CartPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-white/10 bg-dark-800/60 p-12 text-center"
+            className="rounded-2xl border border-white/10 bg-dark-800/50 p-10 text-center"
           >
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-500/10 text-brand-400">
-              <ShoppingCart className="h-8 w-8" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-500/10">
+              <ShoppingCart className="h-8 w-8 text-brand-400" />
             </div>
             <h2 className="font-elegant text-2xl font-semibold text-white">Your cart is empty</h2>
-            <p className="mt-2 font-body text-white/60 text-sm">
+            <p className="mt-2 font-body text-white/60">
               Add some dishes from our menu to get started.
             </p>
             <Link
-              to="/#menu"
+              to="/menu"
               className="mt-6 inline-flex items-center gap-2 rounded-sm bg-brand-500 px-6 py-3 font-body text-xs font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-brand-400"
             >
               Browse Menu <ArrowRight className="w-4 h-4" />
@@ -60,12 +61,13 @@ export default function CartPage() {
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-4 rounded-xl border border-white/10 bg-dark-800/60 p-4"
+                className="flex items-center gap-4 rounded-xl border border-white/10 bg-dark-800/50 p-4"
               >
-                <img
+                <SafeImage
                   src={item.image}
                   alt={item.name}
-                  className="h-20 w-20 rounded-lg object-cover"
+                  className="h-20 w-20 flex-shrink-0 rounded-lg object-cover"
+                  iconClassName="h-7 w-7"
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-elegant text-lg font-semibold text-white truncate">
@@ -81,7 +83,7 @@ export default function CartPage() {
                     type="button"
                     onClick={() => updateQty(item.id, item.qty - 1)}
                     aria-label={`Decrease ${item.name} quantity`}
-                    className="flex h-8 w-8 items-center justify-center rounded-sm border border-white/10 text-white/70 transition-colors hover:border-brand-400/50 hover:text-brand-400"
+                    className="flex h-8 w-8 items-center justify-center rounded-sm border border-white/10 bg-dark-800/60 text-white/70 transition-colors hover:border-brand-400/40 hover:text-white"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -92,7 +94,7 @@ export default function CartPage() {
                     type="button"
                     onClick={() => updateQty(item.id, item.qty + 1)}
                     aria-label={`Increase ${item.name} quantity`}
-                    className="flex h-8 w-8 items-center justify-center rounded-sm border border-white/10 text-white/70 transition-colors hover:border-brand-400/50 hover:text-brand-400"
+                    className="flex h-8 w-8 items-center justify-center rounded-sm border border-white/10 bg-dark-800/60 text-white/70 transition-colors hover:border-brand-400/40 hover:text-white"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -117,7 +119,7 @@ export default function CartPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mt-6 rounded-xl border border-white/10 bg-dark-800/60 p-6"
+              className="mt-6 rounded-xl border border-white/10 bg-dark-800/50 p-6"
             >
               <div className="flex items-center justify-between font-body">
                 <span className="text-white/60">Subtotal</span>
@@ -127,8 +129,8 @@ export default function CartPage() {
               </div>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/#menu"
-                  className="flex-1 rounded-sm border border-white/15 px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:border-brand-400/50 hover:text-brand-300"
+                  to="/menu"
+                  className="flex-1 rounded-sm border border-white/10 bg-dark-800/60 px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-wider text-white/80 transition-colors hover:border-brand-400/40 hover:text-white"
                 >
                   Continue Ordering
                 </Link>

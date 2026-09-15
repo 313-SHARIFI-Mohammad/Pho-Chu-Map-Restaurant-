@@ -8,7 +8,7 @@ export default function About() {
           {/* Left Side: Image */}
           <div className="relative overflow-hidden rounded-xl border border-white/10 shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=75"
+              src="/images/About-pho.webp"
               alt="Authentic Bowl of Vietnamese Pho at Pho Chu Map"
               loading="lazy"
               className="h-[380px] w-full object-cover transition-transform duration-500 hover:scale-105 sm:h-[480px] lg:h-[520px]"

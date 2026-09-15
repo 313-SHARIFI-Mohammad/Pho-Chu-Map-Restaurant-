@@ -26,20 +26,34 @@ const NAV_ITEMS = [
 export default function AdminLayout() {
   const [active, setActive] = useState("overview");
   const logout = useAuthStore((state) => state.logout);
-  const orders = useOrderStore((state) => state.orders);
-  const reservations = useReservationStore((state) => state.reservations);
+  const getUnseenOrderCount = useOrderStore((state) => state.getUnseenOrderCount);
+  const getUnseenReservationCount = useReservationStore((state) => state.getUnseenReservationCount);
+  const markOrdersSeen = useOrderStore((state) => state.markOrdersSeen);
+  const markReservationsSeen = useReservationStore((state) => state.markReservationsSeen);
   const navigate = useNavigate();
 
+  const unseenOrderCount = getUnseenOrderCount();
+  const unseenReservationCount = getUnseenReservationCount();
+
   const counts = {
-    overview: orders.length + reservations.length,
-    orders: orders.length,
-    reservations: reservations.length,
+    overview: unseenOrderCount + unseenReservationCount,
+    orders: unseenOrderCount,
+    reservations: unseenReservationCount,
     menu: 0,
   };
 
   const handleLogout = () => {
     logout();
     navigate("/admin/login");
+  };
+
+  const handleTabClick = (tabId) => {
+    if (tabId === "orders") {
+      markOrdersSeen();
+    } else if (tabId === "reservations") {
+      markReservationsSeen();
+    }
+    setActive(tabId);
   };
 
   const renderPanel = () => {
@@ -76,7 +90,7 @@ export default function AdminLayout() {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setActive(item.id)}
+                  onClick={() => handleTabClick(item.id)}
                   className={`w-full flex items-center gap-3 rounded-lg px-4 py-3 font-body text-sm transition-colors ${
                     isActive
                       ? "bg-brand-500/15 text-brand-300 border border-brand-400/30"
@@ -131,7 +145,7 @@ export default function AdminLayout() {
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setActive(item.id)}
+                    onClick={() => handleTabClick(item.id)}
                     className={`flex flex-shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 font-body text-xs font-medium transition-colors ${
                       isActive
                         ? "bg-brand-500/15 text-brand-300 border border-brand-400/30"
