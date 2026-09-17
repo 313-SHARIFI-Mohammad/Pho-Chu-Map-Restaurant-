@@ -1,4 +1,4 @@
-![Restaurant Website](./restaurant-pic.png)
+![Restaurant Website](./IMG_1098.jpeg)
 
 # React + Vite
 
